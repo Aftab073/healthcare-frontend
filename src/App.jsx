@@ -1,18 +1,47 @@
+// src/App.jsx
+
+import { RouterProvider } from 'react-router-dom'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Toaster } from 'react-hot-toast'
+import { AuthProvider } from '@/lib/auth/authContext'
+import { queryClient } from '@/lib/api/queryClient'
+import ErrorBoundary from '@/components/common/ErrorBoundary'
+import router from '@/routes'
+
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="text-3xl font-bold text-primary-600 mb-4">
-          Healthcare Frontend
-        </h1>
-        <p className="text-gray-600">
-          Tailwind CSS is working! 🎉
-        </p>
-        <button className="mt-4 bg-primary-500 text-white px-4 py-2 rounded hover:bg-primary-600 transition">
-          Test Button
-        </button>
-      </div>
-    </div>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <RouterProvider router={router} />
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              duration: 4000,
+              style: {
+                background: '#fff',
+                color: '#374151',
+                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+              },
+              success: {
+                iconTheme: {
+                  primary: '#10b981',
+                  secondary: '#fff',
+                },
+              },
+              error: {
+                iconTheme: {
+                  primary: '#ef4444',
+                  secondary: '#fff',
+                },
+              },
+            }}
+          />
+        </AuthProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    </ErrorBoundary>
   )
 }
 
