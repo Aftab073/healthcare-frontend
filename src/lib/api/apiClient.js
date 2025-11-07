@@ -4,20 +4,15 @@ import axios from 'axios'
 import { BASE_URL } from './endpoints'
 import tokenService from '../auth/tokenService'
 
-/**
- * Axios instance with interceptors
- * Handles authentication and error responses
- */
-
 const apiClient = axios.create({
   baseURL: BASE_URL,
   headers: {
     'Content-Type': 'application/json',
   },
-  timeout: 10000, // 10 seconds
+  timeout: 10000,
 })
 
-// Request interceptor - Add auth token to requests
+// Request interceptor
 apiClient.interceptors.request.use(
   (config) => {
     const token = tokenService.getAccessToken()
@@ -31,7 +26,7 @@ apiClient.interceptors.request.use(
   }
 )
 
-// Response interceptor - Handle errors
+// Response interceptor
 apiClient.interceptors.response.use(
   (response) => {
     return response
@@ -43,14 +38,17 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true
 
-      // For now, just logout on 401
-      // TODO: Implement token refresh logic if backend supports it
+      // Clear tokens and redirect to login
       tokenService.removeTokens()
-      window.location.href = '/login'
+      
+      // Only redirect if we're not already on a public page
+      if (window.location.pathname !== '/login' && window.location.pathname !== '/register') {
+        window.location.href = '/login'
+      }
+      
       return Promise.reject(error)
     }
 
-    // Handle other errors
     return Promise.reject(error)
   }
 )
