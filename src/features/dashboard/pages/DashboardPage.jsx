@@ -1,7 +1,8 @@
 // src/features/dashboard/pages/DashboardPage.jsx
 
-import PageHeader from '@/components/common/PageHeader'
-import Card from '@/components/ui/Card'
+import { Link } from 'react-router-dom'
+import PageHeader from '../../../components/common/PageHeader'
+import Card from '../../../components/ui/Card'
 
 /**
  * Dashboard Page - Placeholder
@@ -85,30 +86,33 @@ const DashboardPage = () => {
       <Card className="p-6">
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-          
-            href="/patients/new"
+          <Link
+            to="/patients/new"
             className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-primary-500 hover:bg-primary-50 transition-colors text-center"
           >
             <div className="text-primary-600 font-medium">Add New Patient</div>
-          </a>
-          
-            href="/doctors/new"
+          </Link>
+
+          <Link
+            to="/doctors/new"
             className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-success-500 hover:bg-success-50 transition-colors text-center"
           >
             <div className="text-success-600 font-medium">Add New Doctor</div>
-          </a>
-          
-            href="/mappings"
+          </Link>
+
+          <Link
+            to="/mappings"
             className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-warning-500 hover:bg-warning-50 transition-colors text-center"
           >
             <div className="text-warning-600 font-medium">Assign Doctor</div>
-          </a>
-          
-            href="/patients"
+          </Link>
+
+          <Link
+            to="/patients"
             className="p-4 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-500 hover:bg-gray-50 transition-colors text-center"
           >
             <div className="text-gray-600 font-medium">View All Patients</div>
-          </a>
+          </Link>
         </div>
       </Card>
     </div>
