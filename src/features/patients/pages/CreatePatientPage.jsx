@@ -1,15 +1,30 @@
 // src/features/patients/pages/CreatePatientPage.jsx
 
-import PageHeader from '@/components/common/PageHeader'
-import Card from '@/components/ui/Card'
-import Input from '@/components/ui/Input'
-import Button from '@/components/ui/Button'
+import { useNavigate } from 'react-router-dom'
+import PageHeader from '../../../components/common/PageHeader'
+import Card from '../../../components/ui/Card'
+import PatientForm from '../components/PatientForm'
+import { useCreatePatient } from '../hooks/usePatients'
 
 /**
- * Create Patient Page - Placeholder
+ * Create Patient Page
+ * Form to add a new patient
  */
 
 const CreatePatientPage = () => {
+  const navigate = useNavigate()
+  const createPatient = useCreatePatient()
+
+  const handleSubmit = async (data) => {
+    try {
+      await createPatient.mutateAsync(data)
+      navigate('/patients')
+    } catch (error) {
+      // Error is handled by the mutation hook
+      console.error('Failed to create patient:', error)
+    }
+  }
+
   return (
     <div>
       <PageHeader
@@ -17,19 +32,12 @@ const CreatePatientPage = () => {
         subtitle="Enter patient details below"
       />
 
-      <Card className="p-6 max-w-2xl">
-        <form className="space-y-6">
-          <Input label="Full Name" placeholder="Enter patient name" required />
-          <Input label="Email" type="email" placeholder="patient@example.com" required />
-          <Input label="Phone Number" placeholder="+1234567890" />
-          <Input label="Date of Birth" type="date" />
-          <Input label="Address" placeholder="Enter address" />
-          
-          <div className="flex justify-end space-x-3">
-            <Button variant="secondary">Cancel</Button>
-            <Button type="submit">Create Patient</Button>
-          </div>
-        </form>
+      <Card className="p-6 max-w-4xl">
+        <PatientForm
+          onSubmit={handleSubmit}
+          isLoading={createPatient.isPending}
+          submitLabel="Create Patient"
+        />
       </Card>
     </div>
   )
