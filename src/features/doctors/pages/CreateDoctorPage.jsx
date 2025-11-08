@@ -1,15 +1,22 @@
-// src/features/doctors/pages/CreateDoctorPage.jsx
-
-import PageHeader from '@/components/common/PageHeader'
-import Card from '@/components/ui/Card'
-import Input from '@/components/ui/Input'
-import Button from '@/components/ui/Button'
-
-/**
- * Create Doctor Page - Placeholder
- */
+import { useNavigate } from 'react-router-dom'
+import PageHeader from '../../../components/common/PageHeader'
+import Card from '../../../components/ui/Card'
+import DoctorForm from '../components/DoctorForm'
+import { useCreateDoctor } from '../hooks/useDoctors'
 
 const CreateDoctorPage = () => {
+  const navigate = useNavigate()
+  const createDoctor = useCreateDoctor()
+
+  const handleSubmit = async (data) => {
+    try {
+      await createDoctor.mutateAsync(data)
+      navigate('/doctors')
+    } catch (error) {
+      console.error('Failed to create doctor:', error)
+    }
+  }
+
   return (
     <div>
       <PageHeader
@@ -17,19 +24,12 @@ const CreateDoctorPage = () => {
         subtitle="Enter doctor details below"
       />
 
-      <Card className="p-6 max-w-2xl">
-        <form className="space-y-6">
-          <Input label="Full Name" placeholder="Dr. John Smith" required />
-          <Input label="Email" type="email" placeholder="doctor@hospital.com" required />
-          <Input label="Phone Number" placeholder="+1234567890" />
-          <Input label="Specialization" placeholder="Cardiologist" />
-          <Input label="License Number" placeholder="MED-2024-001" />
-          
-          <div className="flex justify-end space-x-3">
-            <Button variant="secondary">Cancel</Button>
-            <Button type="submit">Create Doctor</Button>
-          </div>
-        </form>
+      <Card className="p-6 max-w-4xl">
+        <DoctorForm
+          onSubmit={handleSubmit}
+          isLoading={createDoctor.isPending}
+          submitLabel="Create Doctor"
+        />
       </Card>
     </div>
   )
